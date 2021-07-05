@@ -1,6 +1,5 @@
 package com.comsysto.cycling.qr
 
-import com.comsysto.cycling.encryption.RSAService
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.client.j2se.MatrixToImageWriter
@@ -9,32 +8,17 @@ import java.io.OutputStream
 
 
 @Service
-class SignedQrCodeGenerator(
-    private val rsaService: RSAService
-) {
+class SignedQrCodeGenerator {
 
     companion object {
-        private const val RSA_FIELD_NAME = "hash"
         private const val IMAGE_FORMAT = "png"
         private const val WIDTH = 2000
         private const val HEIGHT = 2000
     }
 
-    fun writeQrCodeToOutputStream(fields: Map<String, String>, oStream: OutputStream) {
-        val concatenatedFields = fields
-            .entries
-            .sortedBy { it.key }
-            .joinToString()
-
-        val rsaHash = rsaService.encryptToBase64(concatenatedFields)
-
-        val fieldsWithRsa = fields.plus(RSA_FIELD_NAME to rsaHash)
-            .entries
-            .sortedBy { it.key }
-            .joinToString()
-
+    fun writeQrCodeToOutputStream(value: String, oStream: OutputStream) {
         val matrix = MultiFormatWriter().encode(
-            fieldsWithRsa,
+            value,
             BarcodeFormat.QR_CODE,
             WIDTH,
             HEIGHT
