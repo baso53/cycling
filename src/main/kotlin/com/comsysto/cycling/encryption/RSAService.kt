@@ -3,8 +3,8 @@ package com.comsysto.cycling.encryption
 import org.springframework.stereotype.Service
 import java.security.PrivateKey
 import java.security.PublicKey
+import java.util.Base64
 import javax.crypto.Cipher
-
 
 @Service
 class RSAService(
@@ -23,7 +23,7 @@ class RSAService(
         val rawMessageBytes = rawMessage.toByteArray()
         val encryptedMessageBytes = encryptCipher.doFinal(rawMessageBytes)
 
-        return String(encryptedMessageBytes)
+        return Base64.getEncoder().encodeToString(encryptedMessageBytes);
     }
 
     fun decrypt(encryptedMessage: String): String {

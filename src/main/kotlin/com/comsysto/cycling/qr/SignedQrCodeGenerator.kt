@@ -5,7 +5,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import org.springframework.stereotype.Service
-import java.io.File
+import java.io.OutputStream
 
 
 @Service
@@ -14,12 +14,13 @@ class SignedQrCodeGenerator(
 ) {
 
     companion object {
-        private const val RSA_FIELD_NAME = "hash";
-        private const val width = 2000
-        private const val height = 2000
+        private const val RSA_FIELD_NAME = "hash"
+        private const val IMAGE_FORMAT = "png"
+        private const val WIDTH = 2000
+        private const val HEIGHT = 2000
     }
 
-    fun generateQrCode(fields: Map<String, String>) {
+    fun writeQrCodeToOutputStream(fields: Map<String, String>, oStream: OutputStream) {
         val concatenatedFields = fields
             .entries
             .sortedBy { it.key }
@@ -35,14 +36,10 @@ class SignedQrCodeGenerator(
         val matrix = MultiFormatWriter().encode(
             fieldsWithRsa,
             BarcodeFormat.QR_CODE,
-            width,
-            height
+            WIDTH,
+            HEIGHT
         )
 
-        MatrixToImageWriter.writeToFile(
-            matrix,
-            "sebo.jpg".substring("sebo.jpg".lastIndexOf('.') + 1),
-            File("sebo.jpg")
-        )
+        MatrixToImageWriter.writeToStream(matrix, IMAGE_FORMAT, oStream)
     }
 }
