@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: "1"
+      author: baso53
+      changes:
+        - createTable:
+            tableName: destination
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: latitude
+                  type: float
+              - column:
+                  name: longitude
+                  type: float
+
+# data for local profile
+  - changeSet:
+      id: testData
+      author: baso53
+      context: local
+      changes:
+        - loadData:
+            tableName: destination
+            relativeToChangelogFile: true
+            quotChar: "&quot;"
+            seperator: ","
+            file: local/00100-initial-local.csv
