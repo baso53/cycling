@@ -26,7 +26,7 @@ class SignedQrCodeGenerator(
             .sortedBy { it.key }
             .joinToString()
 
-        val rsaHash = rsaService.encrypt(concatenatedFields)
+        val rsaHash = rsaService.encryptToBase64(concatenatedFields)
 
         val fieldsWithRsa = fields.plus(RSA_FIELD_NAME to rsaHash)
             .entries

@@ -19,15 +19,15 @@ class RSAService(
         decryptCipher.init(Cipher.DECRYPT_MODE, publicKey)
     }
 
-    fun encrypt(rawMessage: String): String {
+    fun encryptToBase64(rawMessage: String): String {
         val rawMessageBytes = rawMessage.toByteArray()
         val encryptedMessageBytes = encryptCipher.doFinal(rawMessageBytes)
 
-        return Base64.getEncoder().encodeToString(encryptedMessageBytes);
+        return Base64.getEncoder().encodeToString(encryptedMessageBytes)
     }
 
-    fun decrypt(encryptedMessage: String): String {
-        val encryptedMessageBytes = encryptedMessage.toByteArray()
+    fun decryptFromBase64(encryptedMessageBase64: String): String {
+        val encryptedMessageBytes = Base64.getDecoder().decode(encryptedMessageBase64)
         val decryptedMessageBytes = decryptCipher.doFinal(encryptedMessageBytes)
 
         return String(decryptedMessageBytes)

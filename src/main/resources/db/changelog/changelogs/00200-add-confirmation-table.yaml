@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: "1"
+      author: baso53
+      changes:
+        - createTable:
+            tableName: confirmation
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: varchar(255)
+              - column:
+                  name: destination_id
+                  type: int
+                  constraints:
+                    references: destination(id)
+                    foreignKeyName: fk_confirmation_destination
+                    nullable: false
+
+  - changeSet:
+      id: add-unique-constraint
+      author: baso53
+      changes:
+        - addUniqueConstraint:
+            columnNames: user_id, destination_id
+            constraintName: constraint_unique_userId_destinationId
+            tableName: confirmation
