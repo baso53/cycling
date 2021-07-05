@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+private.key
+public.key
+src/main/resources/private.key

@@ -7,6 +7,5 @@ import org.springframework.boot.runApplication
 class CyclingApplication
 
 fun main(args: Array<String>) {
-
-	runApplication<CyclingApplication>(*args)
+    runApplication<CyclingApplication>(*args)
 }
