@@ -25,6 +25,10 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	implementation("org.liquibase:liquibase-core")
 	implementation("org.springframework:spring-jdbc")
+
+	implementation("com.google.zxing:core:3.4.1")
+	implementation("com.google.zxing:javase:3.4.1")
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("io.r2dbc:r2dbc-h2")
