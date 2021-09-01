@@ -21,6 +21,9 @@ class ConfirmationController(
     private val rsaService: RSAService,
     private val confirmationRepository: ConfirmationRepository
 ) {
+    companion object {
+        val OBJECT_MAPPER = ObjectMapper()
+    }
 
     @PostMapping()
     fun tryConfirmation(@RequestBody confirmation: IncomingConfirmation): ConfirmationEntity {
@@ -45,13 +48,12 @@ class ConfirmationController(
 
         val map = fromStringToFieldMap(hashValue)
 
-        val mapper = ObjectMapper()
         val destinationEntity = try {
-            mapper.convertValue(map, DestinationEntity::class.java)
+            OBJECT_MAPPER.convertValue(map, DestinationEntity::class.java)
         } catch (e: IllegalArgumentException) {
             throw ResponseStatusException(
                 HttpStatus.UNPROCESSABLE_ENTITY,
-                "The input value is in the wrong format."
+                "The input value contains invalid properties or is missing required properties."
             )
         }
 
