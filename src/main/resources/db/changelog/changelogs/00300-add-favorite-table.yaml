@@ -4,7 +4,7 @@ databaseChangeLog:
       author: baso53
       changes:
         - createTable:
-            tableName: confirmation
+            tableName: favorite
             columns:
               - column:
                   name: id
@@ -16,14 +16,14 @@ databaseChangeLog:
                   name: user_id
                   type: varchar(255)
               - column:
-                  name: is_confirmed
+                  name: is_favorite
                   type: boolean
               - column:
                   name: destination_name
                   type: varchar(255)
                   constraints:
                     references: destination(name)
-                    foreignKeyName: fk_confirmation_destination
+                    foreignKeyName: fk_favorite_destination
                     nullable: false
               - column:
                   name: created
@@ -38,5 +38,5 @@ databaseChangeLog:
       changes:
         - addUniqueConstraint:
             columnNames: user_id, destination_name
-            constraintName: constraint_confirmationtable_unique_userId_destinationName
-            tableName: confirmation
+            constraintName: constraint_favoritetable_unique_userId_destinationName
+            tableName: favorite

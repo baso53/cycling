@@ -63,13 +63,14 @@ class ConfirmationController(
             confirmationRepository.save(
                 ConfirmationEntity(
                     userId = userId,
-                    destinationName = destinationEntity.name
+                    destinationName = destinationEntity.name,
+                    isConfirmed = true
                 )
             )
         } catch (e: DataIntegrityViolationException) {
             throw ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
-                "User is already registered at the specified destination or destination doesn't exist."
+                "User is already confirmed at the specified destination or destination doesn't exist."
             )
         }
     }
