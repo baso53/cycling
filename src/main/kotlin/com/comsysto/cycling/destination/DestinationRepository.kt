@@ -1,6 +1,6 @@
 package com.comsysto.cycling.destination
 
-import org.springframework.data.repository.reactive.ReactiveSortingRepository
+import org.springframework.data.repository.PagingAndSortingRepository
 
-interface DestinationRepository : ReactiveSortingRepository<DestinationEntity, Int> {
+interface DestinationRepository : PagingAndSortingRepository<DestinationEntity, String> {
 }

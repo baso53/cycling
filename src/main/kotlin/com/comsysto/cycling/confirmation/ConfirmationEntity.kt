@@ -1,11 +1,16 @@
 package com.comsysto.cycling.confirmation
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
+import javax.persistence.*
 
-@Table("confirmation")
+@Entity
+@Table(
+    name = "confirmation",
+    uniqueConstraints = [UniqueConstraint(columnNames = ["userId", "destinationName"])]
+)
 data class ConfirmationEntity(
-    @Id val id: Int? = null,
-    val userId: String,
-    val destinationId: Int
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int? = null,
+    var userId: String,
+    var destinationName: String
 )

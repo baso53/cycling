@@ -1,12 +1,14 @@
 package com.comsysto.cycling.destination
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Table
 
-@Table("destination")
+@Entity
+@Table(name = "destination")
 data class DestinationEntity(
-    @Id val id: Int,
-    val name: String,
-    val latitude: Float,
-    val longitude: Float
+    @Id
+    var name: String,
+    var latitude: Float,
+    var longitude: Float
 )

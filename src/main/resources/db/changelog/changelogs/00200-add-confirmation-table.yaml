@@ -16,10 +16,10 @@ databaseChangeLog:
                   name: user_id
                   type: varchar(255)
               - column:
-                  name: destination_id
-                  type: int
+                  name: destination_name
+                  type: varchar(255)
                   constraints:
-                    references: destination(id)
+                    references: destination(name)
                     foreignKeyName: fk_confirmation_destination
                     nullable: false
 
@@ -28,6 +28,6 @@ databaseChangeLog:
       author: baso53
       changes:
         - addUniqueConstraint:
-            columnNames: user_id, destination_id
-            constraintName: constraint_unique_userId_destinationId
+            columnNames: user_id, destination_name
+            constraintName: constraint_unique_userId_destinationName
             tableName: confirmation

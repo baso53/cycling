@@ -4,7 +4,3 @@ spring:
     user: sa
     password:
     contexts: local
-  r2dbc:
-    url: r2dbc:h2:mem:///testdb
-    username: sa
-    password:

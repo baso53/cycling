@@ -7,14 +7,10 @@ databaseChangeLog:
             tableName: destination
             columns:
               - column:
-                  name: id
-                  type: int
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-              - column:
                   name: name
                   type: varchar(255)
+                  constraints:
+                    primaryKey: true
               - column:
                   name: latitude
                   type: float
@@ -22,7 +18,7 @@ databaseChangeLog:
                   name: longitude
                   type: float
 
-# data for local profile
+# this data will apply only for "local" Spring profile
   - changeSet:
       id: testData
       author: baso53

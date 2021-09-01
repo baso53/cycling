@@ -3,15 +3,16 @@ package com.comsysto.cycling.destination
 import com.comsysto.cycling.encryption.RSAService
 import com.comsysto.cycling.qr.SignedQrCodeGenerator
 import com.comsysto.cycling.utils.toStringWithRsaField
-import org.springframework.core.io.buffer.DataBuffer
-import org.springframework.core.io.buffer.DefaultDataBufferFactory
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import reactor.core.publisher.Mono
+import java.util.*
+import javax.servlet.http.HttpServletResponse
 
+val <T> Optional<T>.value: T?
+    get() = orElse(null)
 
 @RestController
 @RequestMapping("destinations")
@@ -22,37 +23,28 @@ class DestinationController(
 ) {
 
     @GetMapping(produces = [MediaType.TEXT_HTML_VALUE])
-    fun getAll(): Mono<String> {
+    fun getAll(): String {
         return destinationRepository.findAll()
-            .reduce("") { prev, curr ->
-                "$prev <br> <a href=\"destinations/${curr.id}\">Get QR code for ${curr.name} (${curr.id})</a>"
-            }
+            .fold("") { prev, curr -> "$prev <br> <a href=\"destinations/${curr.name}\">Get QR code for ${curr.name}</a>" }
     }
 
     @GetMapping(path = ["{id}"], produces = [MediaType.IMAGE_PNG_VALUE])
-    fun getById(@PathVariable id: Int): Mono<DataBuffer> {
-        return destinationRepository.findById(id)
-            .map { destination ->
-                val dataBuffer = DefaultDataBufferFactory().allocateBuffer()
+    fun getById(@PathVariable id: String, servletResponse: HttpServletResponse) {
+        destinationRepository.findById(id).value?.run {
+            val qrCodeValue = toStringWithRsaField(
+                mapOf(
+                    "name" to name,
+                    "latitude" to latitude.toString(),
+                    "longitude" to longitude.toString(),
+                )
+            )
 
-                dataBuffer.asOutputStream().use { outputStream ->
-                    val qrCodeValue = toStringWithRsaField(
-                        mapOf(
-                            "name" to destination.name,
-                            "latitude" to destination.latitude.toString(),
-                            "longitude" to destination.longitude.toString(),
-                        )
-                    )
+            val encryptedQrCodeValue = rsaService.encryptToBase64(qrCodeValue)
 
-                    val encryptedQrCodeValue = rsaService.encryptToBase64(qrCodeValue)
-
-                    qrCodeGenerator.writeQrCodeToOutputStream(
-                        encryptedQrCodeValue,
-                        outputStream
-                    )
-                }
-
-                dataBuffer
-            }
+            qrCodeGenerator.writeQrCodeToOutputStream(
+                encryptedQrCodeValue,
+                servletResponse.outputStream
+            )
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.comsysto.cycling.confirmation
 
-import org.springframework.data.repository.reactive.ReactiveSortingRepository
+import org.springframework.data.repository.PagingAndSortingRepository
 
-interface ConfirmationRepository : ReactiveSortingRepository<ConfirmationEntity, Int> {
+interface ConfirmationRepository : PagingAndSortingRepository<ConfirmationEntity, Int> {
 }
