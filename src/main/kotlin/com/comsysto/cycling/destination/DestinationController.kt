@@ -23,9 +23,14 @@ class DestinationController(
 ) {
 
     @GetMapping(produces = [MediaType.TEXT_HTML_VALUE])
-    fun getAll(): String {
+    fun getAllHtml(): String {
         return destinationRepository.findAll()
             .fold("") { prev, curr -> "$prev <br> <a href=\"destinations/${curr.name}\">Get QR code for ${curr.name}</a>" }
+    }
+
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getAll(): Iterable<DestinationEntity> {
+        return destinationRepository.findAll()
     }
 
     @GetMapping(path = ["{id}"], produces = [MediaType.IMAGE_PNG_VALUE])
