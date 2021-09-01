@@ -1,7 +1,7 @@
 package com.comsysto.cycling.favorite
 
 import com.comsysto.cycling.destination.value
-import com.comsysto.cycling.favorite.incoming.IncomingFavorite
+import com.comsysto.cycling.favorite.inbound.InboundFavorite
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,10 +16,12 @@ class FavoriteController(
     private val favoriteRepository: FavoriteRepository
 ) {
 
-    @PostMapping()
-    fun tryFavorite(@RequestBody request: IncomingFavorite): FavoriteEntity {
+    companion object {
+        const val userId = "TO_BE_CONFIGURED_WITH_SPRING_SECURITY"
+    }
 
-        val userId = "TO_BE_CONFIGURED_WITH_SPRING_SECURITY"
+    @PostMapping()
+    fun tryFavorite(@RequestBody request: InboundFavorite): FavoriteEntity {
 
         return try {
             favoriteRepository.findByDestinationNameAndUserId(request.destinationName, userId)

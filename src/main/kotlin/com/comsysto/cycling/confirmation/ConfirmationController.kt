@@ -1,6 +1,6 @@
 package com.comsysto.cycling.confirmation
 
-import com.comsysto.cycling.confirmation.incoming.IncomingConfirmation
+import com.comsysto.cycling.confirmation.inbound.InboundConfirmation
 import com.comsysto.cycling.destination.DestinationEntity
 import com.comsysto.cycling.encryption.RSAService
 import com.comsysto.cycling.utils.fromStringToFieldMap
@@ -23,10 +23,11 @@ class ConfirmationController(
 ) {
     companion object {
         val OBJECT_MAPPER = ObjectMapper()
+        const val userId = "TO_BE_CONFIGURED_WITH_SPRING_SECURITY"
     }
 
     @PostMapping()
-    fun tryConfirmation(@RequestBody confirmation: IncomingConfirmation): ConfirmationEntity {
+    fun tryConfirmation(@RequestBody confirmation: InboundConfirmation): ConfirmationEntity {
         val hashValue = try {
             rsaService.decryptFromBase64(confirmation.hash)
         } catch (e: Exception) {
@@ -56,8 +57,6 @@ class ConfirmationController(
                 "The input value contains invalid properties or is missing required properties."
             )
         }
-
-        val userId = "TO_BE_CONFIGURED_WITH_SPRING_SECURITY"
 
         return try {
             confirmationRepository.save(
