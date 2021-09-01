@@ -1,7 +1,8 @@
 package com.comsysto.cycling.destination
 
+import com.comsysto.cycling.encryption.RSAService
 import com.comsysto.cycling.qr.SignedQrCodeGenerator
-import com.comsysto.cycling.utils.RsaHelpers
+import com.comsysto.cycling.utils.toStringWithRsaField
 import org.springframework.core.io.buffer.DataBuffer
 import org.springframework.core.io.buffer.DefaultDataBufferFactory
 import org.springframework.http.MediaType
@@ -17,7 +18,7 @@ import reactor.core.publisher.Mono
 class DestinationController(
     private val destinationRepository: DestinationRepository,
     private val qrCodeGenerator: SignedQrCodeGenerator,
-    private val rsaHelpers: RsaHelpers
+    private val rsaService: RSAService
 ) {
 
     @GetMapping(produces = [MediaType.TEXT_HTML_VALUE])
@@ -35,7 +36,7 @@ class DestinationController(
                 val dataBuffer = DefaultDataBufferFactory().allocateBuffer()
 
                 dataBuffer.asOutputStream().use { outputStream ->
-                    val qrCodeValue = rsaHelpers.toStringWithRsaField(
+                    val qrCodeValue = toStringWithRsaField(
                         mapOf(
                             "name" to destination.name,
                             "latitude" to destination.latitude.toString(),
@@ -43,8 +44,10 @@ class DestinationController(
                         )
                     )
 
+                    val encryptedQrCodeValue = rsaService.encryptToBase64(qrCodeValue)
+
                     qrCodeGenerator.writeQrCodeToOutputStream(
-                        qrCodeValue,
+                        encryptedQrCodeValue,
                         outputStream
                     )
                 }
