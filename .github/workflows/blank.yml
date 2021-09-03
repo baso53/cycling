@@ -31,7 +31,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
           cache: 'gradle'
-      - run: ./gradlew build
+      - run: ./gradlew build -x test
       
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v18
