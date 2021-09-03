@@ -15,8 +15,7 @@ class KeyPairConfig {
     private val keyFactoryInstance = KeyFactory.getInstance("RSA")
 
     private fun getFileBytes(resourceLocation: String): ByteArray {
-        val keyFile = ResourceUtils.getFile(resourceLocation)
-        return keyFile.readBytes()
+        return ResourceUtils.getURL(resourceLocation).openStream().readBytes()
     }
 
     @Bean
